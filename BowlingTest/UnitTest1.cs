@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Policy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace BowlingTest
 {
     [TestClass]
     public class GameTest
     {
-        [TestMethod]
-        public void Roll_1_and_4_score_return_5()
+        [Theory]
+        [InlineData("2,2", 4)]
+        [InlineData("1,4", 5)]
+        [InlineData("1,4,1,4,1,4,1,4,0,0,1,4,1,4,1,4,1,4,0,6", 46)]
+        public void shouldconvert(string rolls, int score)
         {
             var game = new Game();
-            game.roll(1);
-            game.roll(4);
-            Assert.AreEqual(5, game.score());
-        }
 
-        [TestMethod]
-        public void Roll_2_and_2_score_return_4()
-        {
-            var game = new Game();
-            game.roll(2);
-            game.roll(2);
-            Assert.AreEqual(4, game.score());
+            foreach (var roll in rolls.Split(','))
+            {
+                game.roll(int.Parse(roll));
+            }
+            Assert.AreEqual(score, game.score());
         }
 
         /*[TestMethod]
@@ -38,20 +36,6 @@ namespace BowlingTest
             Assert.AreEqual(12, game.score());
         }*/
 
-    }
-
-    public class BasicRoll
-    {
-
-        public bool match(Frame frame)
-        {
-            return true;
-        }
-
-        public int compute(int i, int finalScore)
-        {
-            return finalScore + i;
-        }
     }
 
     public class SpareRoll
@@ -73,29 +57,6 @@ namespace BowlingTest
         public void roll(int i)
         {
             
-        }
-    }
-
-    public class Game
-    {
-        private int _finalScore = 0;
-        private BasicRoll[] _rules;
-
-        public Game()
-        {
-            _rules = new[] {new BasicRoll()};
-        }
-
-        public void roll(int i)
-        {
-            var tmp = new Frame();
-            tmp.roll(i);
-            _finalScore = _rules.First(r => r.match(tmp)).compute(i, _finalScore);
-        }
-
-        public int score()
-        {
-            return _finalScore;
         }
     }
 }
