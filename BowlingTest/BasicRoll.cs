@@ -1,4 +1,7 @@
-﻿namespace BowlingTest
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace BowlingTest
 {
     public class BasicRoll : IRule
     {
@@ -7,9 +10,9 @@
             return true;
         }
 
-        public int compute(int i, int finalScore)
+        public int compute(Frame frame, IEnumerable<Frame> followingFrames, int finalScore)
         {
-            return finalScore + i;
+            return finalScore + frame.Rolls.Sum();
         }
     }
 }
