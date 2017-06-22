@@ -1,6 +1,6 @@
 ﻿namespace BowlingTest
 {
-    public class BasicRoll : IRule
+    public class SpareRoll : IRule
     {
         public bool match(Frame frame)
         {
@@ -9,7 +9,7 @@
 
         public int compute(int i, int finalScore)
         {
-            return finalScore + i;
+            return finalScore + 10 + i;
         }
     }
 }

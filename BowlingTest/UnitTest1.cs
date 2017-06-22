@@ -13,7 +13,8 @@ namespace BowlingTest
         [InlineData("2,2", 4)]
         [InlineData("1,4", 5)]
         [InlineData("1,4,1,4,1,4,1,4,0,0,1,4,1,4,1,4,1,4,0,6", 46)]
-        public void shouldconvert(string rolls, int score)
+        [InlineData("0,1,9,0,0,9,1,4,0,0,1,4,1,4,1,4,1,4,0,6", 50)]
+        public void calculate_basic_score(string rolls, int score)
         {
             var game = new Game();
 
@@ -24,32 +25,26 @@ namespace BowlingTest
             Assert.AreEqual(score, game.score());
         }
 
-        /*[TestMethod]
-        public void Roll_1_and_9_and_1_score_return_12()
-        {
-            var game = new Game();
-            game.roll(1);
-            game.roll(9);
+        //[Theory]
+        //[InlineData("1,9,6", 16+6)]
+        //[InlineData("1,4,1,9,1,4,1,4,0,0,1,4,1,4,1,4,1,4,0,6", 52)]
+        //public void calculate_spare_score(string rolls, int score)
+        //{
+        //    var game = new Game();
 
-            game.roll(1);
-            game.roll(0);
-            Assert.AreEqual(12, game.score());
-        }*/
+        //    foreach (var roll in rolls.Split(','))
+        //    {
+        //        game.roll(int.Parse(roll));
+        //    }
+        //    Assert.AreEqual(score, game.score());
+        //}
 
     }
 
-    public class SpareRoll
+    public interface IRule
     {
-
-        public bool match(Frame frame)
-        {
-            return true;
-        }
-
-        public int compute(int i, int finalScore)
-        {
-            return finalScore + i;
-        }
+        bool match(Frame frame);
+        int compute(int i, int finalScore);
     }
 
     public class Frame
