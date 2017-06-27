@@ -5,14 +5,14 @@ namespace BowlingTest
 {
     public class BasicRoll : IRule
     {
-        public bool match(Frame frame)
+        public bool match(IEnumerable<Frame> frame)
         {
             return true;
         }
 
-        public int compute(Frame frame, IEnumerable<Frame> followingFrames, int finalScore)
+        public int compute(IEnumerable<Frame> frames, int finalScore)
         {
-            return finalScore + frame.Rolls.Sum();
+            return finalScore + frames.First().Rolls.Sum();
         }
     }
 }

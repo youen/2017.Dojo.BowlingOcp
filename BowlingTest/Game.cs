@@ -15,36 +15,23 @@ namespace BowlingTest
                 _frames.Add(new Frame());
             }
 
-            var score = 0;
-            foreach (var frame in _frames)
-            {
-                score = _rules.First(r => r.match(frame)).compute(
-                    frame, FollowingFrames(frame), score);
-            }
+            var score = CalcScore(0, _frames);
             _finalScore = score;
         }
-
-        private IEnumerable<Frame> FollowingFrames(Frame frame)
+        
+        private int CalcScore(int lastScore, IEnumerable<Frame> frames)
         {
-            var list = new List<Frame>();
-            var add = false;
-            foreach (var frameToAdd in _frames)
+            if (frames.Any())
             {
-                if (add)
-                {
-                    list.Add(frameToAdd);    
-                }
-
-                if(frameToAdd == frame)
-                {
-                    add = true;
-                }
-                
+                var newScore =  _rules.First(r => r.match(frames))
+                    .compute(frames, lastScore);
+            
+                return CalcScore(newScore, frames.Skip(1));
             }
-
-            return list;
+            return  lastScore;
         }
-
+       
+    
         private IRule[] _rules;
 
         private List<Frame> _frames;
@@ -53,7 +40,7 @@ namespace BowlingTest
         {   
             _rules = new IRule[]
             {
-                new SpareRoll(), 
+                new SpareRule(), 
                 new BasicRoll()
             };
             _frames = new List<Frame>()
